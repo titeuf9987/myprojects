@@ -1,3 +1,4 @@
+
 /* @file EventSerialKeypad.pde
  || @version 1.0
  || @author Alexander Brevig
@@ -9,6 +10,8 @@
  */
 #include <Keypad.h>
 #include "U8glib.h"
+#include <TinyGPS++.h>
+#include <SoftwareSerial.h>
 
 
 // OLED
@@ -24,8 +27,8 @@ char keys[ROWS][COLS] = {
     {'*','0','#','D'}
 };
 
-byte rowPins[ROWS] = {5, 4, 3, 2}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {9, 8, 7, 6}; //connect to the column pinouts of the keypad
+byte rowPins[ROWS] = {9, 8, 7, 6}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {5, 4, 3, 2}; //connect to the column pinouts of the keypad
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 byte ledPin = 13; 
@@ -48,44 +51,21 @@ int avgSpeed=40;
 int currSpeed=68;
 
 
-void processMode2(char key){
-  if (key=='#') {
-    // startAvg
-    avgSpeed=44;
-  }
-  if (key=='A') {
-    // RST inter
-    targetSpeed+=10;
-  }
-  if (key=='B') {
-    // RST inter
-    targetSpeed+=1;
-  }
-  if (key=='C') {
-    // RST inter
-    targetSpeed-=1;
-  }
-  if (key=='D') {
-    // RST inter
-    targetSpeed-=10;
-  }
+static const int RXPin = 4, TXPin = 3;
+static const uint32_t GPSBaud = 4800;
+
+// The TinyGPS++ object
+TinyGPSPlus gps;
+
+// The serial connection to the GPS device
+SoftwareSerial ss(RXPin, TXPin);
 
 
-}
-
-void draw2(void){
-  char buf[30];
-  char key = keypad.getKey();
-  u8g.setFont(u8g_font_9x15);
-
-  snprintf (buf, 30, "Moyenne : %i", avgSpeed);
-  u8g.drawStr( 0, 40, buf);
-  snprintf (buf, 30, "Target : %i", targetSpeed);
-  u8g.drawStr( 0, 60, buf);
-
-}
-
-
+/*****************************************************************************************
+ * 
+ *       PROCESSINGS
+ * 
+ *****************************************************************************************/
 
 void processMode1(char key){
   if (key=='#') {
@@ -117,15 +97,30 @@ void processMode1(char key){
 
 }
 
-void draw1(void){
-  char buf[30];
-  char key = keypad.getKey();
-  u8g.setFont(u8g_font_9x15);
 
-  snprintf (buf, 30, "KM : %i", totKm);
-  u8g.drawStr( 0, 40, buf);
-  snprintf (buf, 30, "Inter : %i", interKm);
-  u8g.drawStr( 0, 60, buf);
+
+void processMode2(char key){
+  if (key=='#') {
+    // startAvg
+    avgSpeed=44;
+  }
+  if (key=='A') {
+    // RST inter
+    targetSpeed+=10;
+  }
+  if (key=='B') {
+    // RST inter
+    targetSpeed+=1;
+  }
+  if (key=='C') {
+    // RST inter
+    targetSpeed-=1;
+  }
+  if (key=='D') {
+    // RST inter
+    targetSpeed-=10;
+  }
+
 
 }
 
@@ -140,16 +135,49 @@ void processMode3(char key){
   }
 }
 
+
+
+
+/*****************************************************************************************
+ * 
+ *       DRAWINGS
+ * 
+ *****************************************************************************************/
+void draw1(void){
+  char buf[30];
+  char key = keypad.getKey();
+  u8g.setFont(u8g_font_9x15);
+
+  snprintf (buf, 30, "KM : %i", totKm);
+  u8g.drawStr( 5, 40, buf);
+  snprintf (buf, 30, "Inter : %i", interKm);
+  u8g.drawStr( 5, 60, buf);
+
+}
+
+void draw2(void){
+  char buf[30];
+  char key = keypad.getKey();
+  u8g.setFont(u8g_font_9x15);
+
+  snprintf (buf, 30, "Moyenne : %i", avgSpeed);
+  u8g.drawStr( 5, 40, buf);
+  snprintf (buf, 30, "Target : %i", targetSpeed);
+  u8g.drawStr( 5, 60, buf);
+
+}
+
+
+
 void draw3(void){
   char buf[30];
   char key = keypad.getKey();
   u8g.setFont(u8g_font_fur20);
 
   snprintf (buf, 30, "%i Km/h", currSpeed);
-  u8g.drawStr( 5, 40, buf);
-
-
+  u8g.drawStr( 5, 50, buf);
 }
+
 void draw4(void){
 char buf[30];
 char key = keypad.getKey();
@@ -157,8 +185,8 @@ char key = keypad.getKey();
 
 
 snprintf (buf, 20, "Speed D : %i", i);
-  u8g.drawStr( 0, 20, "Spd: 58 ; 90");
-  u8g.drawStr( 0, 40, buf);
+  u8g.drawStr( 5, 30, "Spd: 58 ; 90");
+  u8g.drawStr( 5, 50, buf);
 
 }
 
@@ -185,7 +213,8 @@ if (mode=='4') draw4();
 
 
 void setup(){
-    Serial.begin(115200);
+    Serial.begin(57600);
+    ss.begin(GPSBaud);
     pinMode(ledPin, OUTPUT);              // Sets the digital pin as output.
     digitalWrite(ledPin, HIGH);           // Turn the LED on.
     ledPin_state = digitalRead(ledPin);   // Store initial LED state. HIGH when LED is on.
@@ -206,20 +235,23 @@ void loop(){
     draw();
   } while( u8g.nextPage() );
 
+  // reading GPS
+  while (ss.available() > 0)
+    gps.encode(ss.read());
 
-    if (key) {
-        Serial.println(key);
-    }
-    if (blink){
-        digitalWrite(ledPin,!digitalRead(ledPin));    // Change the ledPin from Hi2Lo or Lo2Hi.
-        delay(100);
-    }
+  if (key) {
+      Serial.println(key);
+  }
+
+
+    
 }
 
 // Taking care of some special events.
 void keypadEvent(KeypadEvent key){
     switch (keypad.getState()){
     case PRESSED:
+        Serial.println(key);
         if (key == '1') {
           mode='1';
         }
@@ -235,22 +267,12 @@ void keypadEvent(KeypadEvent key){
         if (mode=='1') processMode1(key);
         if (mode=='2') processMode2(key);
         if (mode=='3') processMode3(key);
-
-        
         break;
 
     case RELEASED:
-        if (key == '*') {
-            digitalWrite(ledPin,ledPin_state);    // Restore LED state from before it started blinking.
-            blink = false;
-        }
         break;
 
     case HOLD:
-        if (key == '*') {
-            blink = true;    // Blink the LED when holding the * key.
-        }
-        
         break;
     }
 }
