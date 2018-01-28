@@ -234,6 +234,8 @@ void loop(){
 
   if (gps.available( gpsPort )) {
     gps_fix fix = gps.read();
+    currSpeed = fix.speed_kph();
+    
     /*
     float bearingToLondon = fix.location.BearingToDegrees( London );
     bool  validDT         = fix.valid.date & fix.valid.time;
