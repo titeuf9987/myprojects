@@ -27,8 +27,8 @@ char keys[ROWS][COLS] = {
     {'*','0','#','D'}
 };
 
-byte rowPins[ROWS] = {9, 8, 7, 6}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {5, 4, 3, 2}; //connect to the column pinouts of the keypad
+byte rowPins[ROWS] = {12, 11, 10, 9}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {8, 7, 6, 5}; //connect to the column pinouts of the keypad
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 byte ledPin = 13; 
@@ -51,8 +51,8 @@ int avgSpeed=40;
 int currSpeed=68;
 
 
-static const int RXPin = 4, TXPin = 3;
-static const uint32_t GPSBaud = 4800;
+static const int RXPin = 3, TXPin = 4;
+static const uint32_t GPSBaud = 4800;//9600; //4800;
 
 // The TinyGPS++ object
 TinyGPSPlus gps;
@@ -172,7 +172,7 @@ void draw2(void){
 void draw3(void){
   char buf[30];
   char key = keypad.getKey();
-  u8g.setFont(u8g_font_fur20);
+  u8g.setFont(u8g_font_9x15);
 
   snprintf (buf, 30, "%i Km/h", currSpeed);
   u8g.drawStr( 5, 50, buf);
@@ -238,6 +238,10 @@ void loop(){
   // reading GPS
   while (ss.available() > 0)
     gps.encode(ss.read());
+
+Serial.println(gps.satellites.value());
+Serial.println(gps.location.lat());
+
 
   if (key) {
       Serial.println(key);

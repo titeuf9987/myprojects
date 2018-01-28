@@ -13,7 +13,7 @@ LiquidCrystal lcd(13,12,11,10,9,8);
 
 // GPS variables
 TinyGPSPlus gps;
-SoftwareSerial ss(7, 6);
+SoftwareSerial ss(10, 11);
 
 
 // Declaring pins
@@ -71,7 +71,7 @@ void setup() {
   lcd.print("My GPS is starting");
   
   //Serial.begin(9600);
-  Serial.begin(19200);
+  Serial.begin(57600);
   ss.begin(9600);
 
   Serial.println("setup");
