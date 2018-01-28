@@ -52,11 +52,12 @@ float currLon;
 int alt;
 
 
-int interKm = 15;
-int totKm = 16;
+float interKm = 115;
+float totKm = 116;
 
 int targetSpeed=30;
-int avgSpeed=40;
+int avgSpeed=0;
+boolean computeAvgSpeed = false;
 
 
 /*****************************************************************************************
@@ -66,30 +67,35 @@ int avgSpeed=40;
  *****************************************************************************************/
 
 void processMode1(char key){
+  Serial.println(key);
   if (key=='#') {
     // RST all
-    totKm ++;
-    interKm++;
+    totKm=0;
+    interKm=0;
   }
   if (key=='*') {
     // RST inter
-    interKm++;
+    interKm = 0;
   }
   if (key=='A') {
     // RST inter
-    totKm+=10;
+    interKm += 1;
+    totKm +=1;
   }
   if (key=='B') {
     // RST inter
-    totKm+=1;
+    interKm += 0.1;
+    totKm +=0.1;
   }
   if (key=='C') {
     // RST inter
-    totKm-=1;
+    interKm -= 0.1;
+    totKm -=0.1;
   }
   if (key=='D') {
     // RST inter
-    totKm-=10;
+    interKm -= 1;
+    totKm -=1;
   }
 
 
@@ -100,7 +106,7 @@ void processMode1(char key){
 void processMode2(char key){
   if (key=='#') {
     // startAvg
-    avgSpeed=44;
+    avgSpeed=0;
   }
   if (key=='A') {
     // RST inter
@@ -125,14 +131,18 @@ void processMode2(char key){
 void processMode3(char key){
   if (key=='#') {
     // RST all
-    currSpeed+=15;
+    avgSpeed=0;
+    computeAvgSpeed = true;
   }
   if (key=='*') {
     // RST all
-    currSpeed-=15;
+    avgSpeed=0;
   }
 }
 
+void processMode4(char key){
+
+}
 
 
 
@@ -142,8 +152,8 @@ void processMode3(char key){
  * 
  *****************************************************************************************/
 char printBuffer[128];
-void prepareString(char label,float val) {
-  char buf[30];
+//char label[50];
+void prepareString(char label[],float val) {
   strcpy(printBuffer, label);
   dtostrf(val, 2,2, &printBuffer[strlen(printBuffer)]);
 }
@@ -162,8 +172,12 @@ void draw1(void){
   snprintf (buf, 30, "Inter : %i", interKm);
   u8g.drawStr( 5, 60, buf);
 */ 
-  prepareString("Inter : ",interKm);
+  u8g.setFont(u8g_font_9x15);
+  prepareString("   KM :",totKm);
   u8g.drawStr( 5, 40, printBuffer);
+  prepareString("Inter :",interKm);
+  u8g.drawStr( 5, 60, printBuffer);
+  
 //  u8g.drawStr( 5, 60, (char) prepareString("Inter : ",interKm));
 
 }
@@ -209,7 +223,10 @@ void drawHead(void){
     
     u8g.setFont(u8g_font_5x8);
     u8g.drawStr( 2, 8, "hh:mi");
-    u8g.drawStr( 97, 8, "GPS: "+sats);
+
+    prepareString("GPS: ",sats);
+    u8g.drawStr( 97, 8, printBuffer);
+
     u8g.drawFrame(0,0,30,10);
     u8g.drawFrame(95,0,33,10);
 
@@ -313,6 +330,7 @@ void keypadEvent(KeypadEvent key){
         if (mode=='1') processMode1(key);
         if (mode=='2') processMode2(key);
         if (mode=='3') processMode3(key);
+        if (mode=='4') processMode4(key);
         break;
 
     case RELEASED:
