@@ -45,12 +45,18 @@ boolean ledPin_state;
 int i=0;
 char mode='1';
 
-int totKm = 16;
+int sats=0;
+int currSpeed=0;
+float currLat;
+float currLon;
+int alt;
+
+
 int interKm = 15;
+int totKm = 16;
 
 int targetSpeed=30;
 int avgSpeed=40;
-int currSpeed=68;
 
 
 /*****************************************************************************************
@@ -188,7 +194,7 @@ void drawHead(void){
     
     u8g.setFont(u8g_font_5x8);
     u8g.drawStr( 2, 8, "hh:mi");
-    u8g.drawStr( 97, 8, "GPS: 2");
+    u8g.drawStr( 97, 8, "GPS: "+sats);
     u8g.drawFrame(0,0,30,10);
     u8g.drawFrame(95,0,33,10);
 
@@ -235,6 +241,12 @@ void loop(){
   if (gps.available( gpsPort )) {
     gps_fix fix = gps.read();
     currSpeed = fix.speed_kph();
+
+    sats=fix.satellites;
+    currSpeed=fix.speed_kph();
+    currLat=fix.latitude ();
+    currLon=fix.longitude();
+    alt=fix.altitude ();
     
     /*
     float bearingToLondon = fix.location.BearingToDegrees( London );
