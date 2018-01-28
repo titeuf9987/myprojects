@@ -10,8 +10,14 @@
  */
 #include <Keypad.h>
 #include "U8glib.h"
-#include <TinyGPS++.h>
-#include <SoftwareSerial.h>
+
+
+#include <NMEAGPS.h>
+#include <GPSport.h>
+
+NMEAGPS     gps;
+
+
 
 
 // OLED
@@ -36,10 +42,6 @@ byte ledPin = 13;
 boolean blink = false;
 boolean ledPin_state;
 
-
-int potPin = 0;    // select the input pin for the potentiometer
-
-int val = 0;       // variable to store the value coming from the sensor
 int i=0;
 char mode='1';
 
@@ -49,16 +51,6 @@ int interKm = 15;
 int targetSpeed=30;
 int avgSpeed=40;
 int currSpeed=68;
-
-
-static const int RXPin = 3, TXPin = 4;
-static const uint32_t GPSBaud = 4800;//9600; //4800;
-
-// The TinyGPS++ object
-TinyGPSPlus gps;
-
-// The serial connection to the GPS device
-SoftwareSerial ss(RXPin, TXPin);
 
 
 /*****************************************************************************************
@@ -214,7 +206,7 @@ if (mode=='4') draw4();
 
 void setup(){
     Serial.begin(57600);
-    ss.begin(GPSBaud);
+
     pinMode(ledPin, OUTPUT);              // Sets the digital pin as output.
     digitalWrite(ledPin, HIGH);           // Turn the LED on.
     ledPin_state = digitalRead(ledPin);   // Store initial LED state. HIGH when LED is on.
@@ -222,12 +214,17 @@ void setup(){
 
     u8g.setColorIndex(1);         // pixel on
 
+    gpsPort.begin(9600);
 
 }
 
 void loop(){
-    char key = keypad.getKey();
-    val = analogRead(potPin);    // read the value from the sensor
+  char key = keypad.getKey();
+  
+  // Reading key
+  if (key) {
+      Serial.println(key);
+  }
 
   // picture loop
   u8g.firstPage();  
@@ -235,17 +232,33 @@ void loop(){
     draw();
   } while( u8g.nextPage() );
 
-  // reading GPS
-  while (ss.available() > 0)
-    gps.encode(ss.read());
+  if (gps.available( gpsPort )) {
+    gps_fix fix = gps.read();
+    /*
+    float bearingToLondon = fix.location.BearingToDegrees( London );
+    bool  validDT         = fix.valid.date & fix.valid.time;
 
-Serial.println(gps.satellites.value());
-Serial.println(gps.location.lat());
+    print(             fix.satellites       , fix.valid.satellites, 3             );
+    print(             fix.hdop/1000.0      , fix.valid.hdop      , 6, 2          );
+    print(             fix.latitude ()      , fix.valid.location  , 10, 6         );
+    print(             fix.longitude()      , fix.valid.location  , 11, 6         );
+    print(             fix.dateTime         , validDT             , 20            );
+    print(             fix.altitude ()      , fix.valid.altitude  , 7, 2          );
+    print(             fix.speed_kph()      , fix.valid.speed     , 7, 2          );
+    print(             fix.heading  ()      , fix.valid.heading   , 7, 2          );
+    print( compassDir( fix.heading  () )    , fix.valid.heading   , 4             );
+    print( fix.location.DistanceKm( London ), fix.valid.location  , 5             );
+    print(             bearingToLondon      , fix.valid.location  , 7, 2          );
+    print( compassDir( bearingToLondon )    , fix.valid.location  , 4             );
 
-
-  if (key) {
-      Serial.println(key);
+    print( gps.statistics.chars , true, 10 );
+    print( gps.statistics.ok    , true,  6 );
+    print( gps.statistics.errors, true,  6 );
+    */
   }
+
+
+
 
 
     
