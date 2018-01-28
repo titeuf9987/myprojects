@@ -141,7 +141,18 @@ void processMode3(char key){
  *       DRAWINGS
  * 
  *****************************************************************************************/
+char printBuffer[128];
+void prepareString(char label,float val) {
+  char buf[30];
+  strcpy(printBuffer, label);
+  dtostrf(val, 2,2, &printBuffer[strlen(printBuffer)]);
+}
+
 void draw1(void){
+  /****************
+   * Original
+   */
+   /*
   char buf[30];
   char key = keypad.getKey();
   u8g.setFont(u8g_font_9x15);
@@ -150,6 +161,10 @@ void draw1(void){
   u8g.drawStr( 5, 40, buf);
   snprintf (buf, 30, "Inter : %i", interKm);
   u8g.drawStr( 5, 60, buf);
+*/ 
+  prepareString("Inter : ",interKm);
+  u8g.drawStr( 5, 40, printBuffer);
+//  u8g.drawStr( 5, 60, (char) prepareString("Inter : ",interKm));
 
 }
 
