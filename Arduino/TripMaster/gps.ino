@@ -4,7 +4,7 @@ void initGPS(void){
 
 void getGPS(void){
     if (gps.available( gpsPort )) {
-    gps_fix fix = gps.read();
+    fix = gps.read();
     currSpeed = fix.speed_kph();
 
     sats = fix.satellites;

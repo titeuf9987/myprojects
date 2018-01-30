@@ -25,17 +25,7 @@ int currSpeed = 0;
 float currLat;
 float currLon;
 int alt;
-
-
-
-
-
-/***************************
- * Display variables
- *************************/
-
-// OLED
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0); // I2C / TWI
+gps_fix fix;
 
 
 /***************************
