@@ -1,11 +1,11 @@
 
-/* @file EventSerialKeypad.pde
- || @version 1.0
- || @author Alexander Brevig
- || @contact alexanderbrevig@gmail.com
+/* @file TrimMaster
+ || @version 0.1
+ || @author Vincent Streignard
+ || @contact N/A
  ||
  || @description
- || | Demonstrates using the KeypadEvent.
+ || | My TripMaster - uring OLED + GPS + keypad
  || #
  */
 #include <Keypad.h>
