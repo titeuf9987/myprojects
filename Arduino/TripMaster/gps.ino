@@ -2,6 +2,10 @@ void initGPS(void){
   gpsPort.begin(9600);
 }
 
+void saveLocation(void){
+  prevPosition = fix.location;
+}
+
 void getGPS(void){
     if (gps.available( gpsPort )) {
     fix = gps.read();

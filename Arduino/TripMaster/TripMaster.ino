@@ -25,7 +25,10 @@ int currSpeed = 0;
 float currLat;
 float currLon;
 int alt;
+
+
 gps_fix fix;
+NeoGPS::Location_t prevPosition;
 
 
 /***************************
