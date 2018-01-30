@@ -11,6 +11,10 @@ void prepareString(char label[], float val) {
 }
 
 
+void initDisplay(void){
+  u8g.setColorIndex(1);         // pixel on
+}
+
 
 
 void draw1(void) {

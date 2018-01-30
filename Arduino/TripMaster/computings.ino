@@ -11,9 +11,19 @@ int targetSpeed = 30;
 int avgSpeed = 0;
 boolean computeAvgSpeed = false;
 
+void doComputes(void){
+  if (mode == '1') processMode1();
+  if (mode == '2') processMode2();
+  if (mode == '3') processMode3();
+  if (mode == '4') processMode4();
+}
+
+void processMode1(void){
+  
+}
 
 
-void processMode1(char key) {
+void processKeyMode1(char key) {
   Serial.println(key);
   if (key == '#') {
     // RST all
@@ -48,9 +58,12 @@ void processMode1(char key) {
 
 }
 
+void processMode2(void){
+  
+}
 
 
-void processMode2(char key) {
+void processKeyMode2(char key) {
   if (key == '#') {
     // startAvg
     avgSpeed = 0;
@@ -75,7 +88,12 @@ void processMode2(char key) {
 
 }
 
-void processMode3(char key) {
+void processMode3(void){
+  
+}
+
+
+void processKeyMode3(char key) {
   if (key == '#') {
     // RST all
     avgSpeed = 0;
@@ -87,7 +105,11 @@ void processMode3(char key) {
   }
 }
 
-void processMode4(char key) {
+
+void processMode4(void){
+  
+}
+void processKeyMode4(char key) {
 
 }
 

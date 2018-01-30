@@ -1,3 +1,8 @@
+void initKeyboard(void){
+    keypad.addEventListener(keypadEvent); // Add an event listener for this keypad
+
+}
+
 
 // Taking care of some special events.
 void keypadEvent(KeypadEvent key) {
@@ -18,10 +23,10 @@ void keypadEvent(KeypadEvent key) {
       if (key == '4') {
         mode = '4';
       }
-      if (mode == '1') processMode1(key);
-      if (mode == '2') processMode2(key);
-      if (mode == '3') processMode3(key);
-      if (mode == '4') processMode4(key);
+      if (mode == '1') processKeyMode1(key);
+      if (mode == '2') processKeyMode2(key);
+      if (mode == '3') processKeyMode3(key);
+      if (mode == '4') processKeyMode4(key);
       break;
 
     case RELEASED:

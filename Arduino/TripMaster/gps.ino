@@ -1,3 +1,7 @@
+void initGPS(void){
+  gpsPort.begin(9600);
+}
+
 void getGPS(void){
     if (gps.available( gpsPort )) {
     gps_fix fix = gps.read();

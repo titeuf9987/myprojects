@@ -60,21 +60,17 @@ U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0); // I2C / TWI
 
 char mode = '1';
 
-
 void setup() {
   Serial.begin(57600);
-
-  keypad.addEventListener(keypadEvent); // Add an event listener for this keypad
-  u8g.setColorIndex(1);         // pixel on
-  gpsPort.begin(9600);
-
+  initDisplay();
+  initKeyboard();
+  initGPS();
 }
 
 void loop() {
-
   getGPS();
+  doComputes();
   processDisplay();
-
 }
 
 
