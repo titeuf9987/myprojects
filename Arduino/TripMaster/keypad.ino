@@ -1,7 +1,8 @@
 
-
 // Taking care of some special events.
 void keypadEvent(KeypadEvent key) {
+//  char key = keypad.getKey();
+
   switch (keypad.getState()) {
     case PRESSED:
       Serial.println(key);

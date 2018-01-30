@@ -10,6 +10,9 @@ void prepareString(char label[], float val) {
   dtostrf(val, 2, 2, &printBuffer[strlen(printBuffer)]);
 }
 
+
+
+
 void draw1(void) {
   /****************
      Original
@@ -90,4 +93,14 @@ void draw(void) {
   if (mode == '4') draw4();
 }
 
+
+
+// Function called by loop
+void processDisplay(void){
+    // picture loop
+  u8g.firstPage();
+  do {
+    draw();
+  } while ( u8g.nextPage() );
+}
 
