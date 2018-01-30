@@ -86,7 +86,6 @@ void drawHead(void) {
   u8g.drawFrame(0, 0, 30, 10);
   u8g.drawFrame(95, 0, 33, 10);
 
-
 }
 
 void draw(void) {

@@ -18,6 +18,10 @@ void doComputes(void){
   if (mode == '4') processMode4();
 }
 
+
+/*****************************************
+ *   MODE 1 = XXXXXX
+ */
 void processMode1(void){
   
 }
@@ -58,6 +62,11 @@ void processKeyMode1(char key) {
 
 }
 
+
+/*****************************************
+ *   MODE 2 = XXXXXX
+ */
+
 void processMode2(void){
   
 }
@@ -88,6 +97,11 @@ void processKeyMode2(char key) {
 
 }
 
+
+/*****************************************
+ *   MODE 3 = XXXXXX
+ */
+
 void processMode3(void){
   
 }
@@ -105,6 +119,9 @@ void processKeyMode3(char key) {
   }
 }
 
+/*****************************************
+ *   MODE 4 = XXXXXX
+ */
 
 void processMode4(void){
   
