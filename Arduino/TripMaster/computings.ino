@@ -6,17 +6,23 @@
 
 float interKm = 0;
 float totKm = 0;
-int interDuration=0;
+int interStart=0;
 
 int targetSpeed = 30;
 int avgSpeed = 0;
 boolean computeAvgSpeed = false;
 
 void doComputes(void){
-  if (mode == '1') processMode1();
-  if (mode == '2') processMode2();
-  if (mode == '3') processMode3();
-  if (mode == '4') processMode4();
+  switch(mode){
+    case 1: processMode1();
+            break;
+    case 2: processMode2();
+            break;     
+    case 3: processMode3();
+            break;
+    case 4: processMode4();
+            break;
+  }
 }
 
 
@@ -34,12 +40,12 @@ void processKeyMode1(char key) {
     // RST all
     totKm = 0;
     interKm = 0;
-    interDuration=0;
+    interStart=millis();
   }
   if (key == '*') {
     // RST inter
     interKm = 0;
-    interDuration=0;
+    interStart=millis();
   }
   if (key == 'A') {
     // RST inter
@@ -79,10 +85,15 @@ void processKeyMode2(char key) {
   if (key == '#') {
     // startAvg
     avgSpeed = 0;
+    interKm = 0;
+    interStart=millis();
+
   }
   if (key == 'A') {
     // RST inter
     targetSpeed += 10;
+    interKm = 0;
+    interStart=millis();
   }
   if (key == 'B') {
     // RST inter

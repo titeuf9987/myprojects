@@ -14,6 +14,7 @@
 
 #include <NMEAGPS.h>
 #include <GPSport.h>
+#include <Arduino.h>
 
 const int gpsInterval = 1000;
 

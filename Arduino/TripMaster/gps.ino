@@ -37,16 +37,17 @@ void getGPS(void) {
 
         float dist;
         dist = fix.location.DistanceKm( prevLocation );
-        if (dist >= 10) {
-          totKm +=dist;
-          interKm +=dist;
+        
+        // calcule les distance et vitesse moyenne que si la distance entre précédent et courant est >= 50m
+        if (dist >= 50) {
+          totKm +=dist/1000;
+          interKm +=dist/1000;
           // sauve position précédente
           prevLocation = fix.location;
-          avgSpeed = interKm / (interDuration+1);
+          // calcul vitesse moyenne
+          avgSpeed = interKm / ((millis()-interStart)/3600);
         }
         
-
-
         /*
           float bearingToLondon = fix.location.BearingToDegrees( London );
           bool  validDT         = fix.valid.date & fix.valid.time;
