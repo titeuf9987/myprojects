@@ -15,6 +15,8 @@
 #include <NMEAGPS.h>
 #include <GPSport.h>
 
+const int gpsInterval = 1000;
+
 /***************************
  * GPS variables
  *************************/
@@ -25,6 +27,7 @@ int currSpeed = 0;
 float currLat;
 float currLon;
 int alt;
+
 
 
 gps_fix fix;

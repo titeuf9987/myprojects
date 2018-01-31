@@ -4,8 +4,9 @@
 
  *****************************************************************************************/
 
-float interKm = 115;
-float totKm = 116;
+float interKm = 0;
+float totKm = 0;
+int interDuration=0;
 
 int targetSpeed = 30;
 int avgSpeed = 0;
@@ -33,10 +34,12 @@ void processKeyMode1(char key) {
     // RST all
     totKm = 0;
     interKm = 0;
+    interDuration=0;
   }
   if (key == '*') {
     // RST inter
     interKm = 0;
+    interDuration=0;
   }
   if (key == 'A') {
     // RST inter
