@@ -27,7 +27,15 @@ void doComputes(void){
 
 
 /*****************************************
- *   MODE 1 = XXXXXX
+ *   MODE 1 = Km et intermédiaires
+ *   
+ *   
+ *   --------------
+ *      KM: XXX.X
+ *   Inter: XXX.X
+ *   --------------
+ *   
+ *   
  */
 void processMode1(void){
   
@@ -74,6 +82,17 @@ void processKeyMode1(char key) {
 
 /*****************************************
  *   MODE 2 = XXXXXX
+ *   
+ *   --------------
+ *    Cible: XXX
+ *     Km/h: XXX.X
+ *      Moy: XXX.X
+ *   ?????
+ *   --------------
+ *   
+ *   
+ *   
+ *   
  */
 
 void processMode2(void){
@@ -113,7 +132,13 @@ void processKeyMode2(char key) {
 
 
 /*****************************************
- *   MODE 3 = XXXXXX
+ *   MODE 3 = Vitesse
+ *   
+ *   
+ *   --------------
+ *     Km/h: XXX.X
+ *   --------------
+ *   
  */
 
 void processMode3(void){
@@ -134,7 +159,18 @@ void processKeyMode3(char key) {
 }
 
 /*****************************************
- *   MODE 4 = XXXXXX
+ *   MODE 4 = GPS / Position
+ *   
+ *   
+ *   
+  *   --------------
+ *      Lat/lon: X°XX'XX.X" / X°XX'XX.X"
+ *    Direction:  XXX.X°
+ *    Sombreffe: XXX.X Km
+ *   ?????
+ *   --------------
+*   
+ *   
  */
 
 void processMode4(void){
