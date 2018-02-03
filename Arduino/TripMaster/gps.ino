@@ -1,5 +1,10 @@
 long prevMeasure = millis();
 NeoGPS::Location_t prevLocation;
+/*50°31'54.0"N 4°37'10.3"E*/
+/* 50.531628, 4.619511 */
+NeoGPS::Location_t home( 4619511L, 50531628L );
+
+
 
 void initGPS(void) {
   gpsPort.begin(9600);
@@ -28,7 +33,7 @@ void getGPS(void) {
         sats = fix.satellites;
       }
 
-      // calcul sur emplacement
+      // calcul à partir de l'emplacement
       if (fix.valid.location) {
         // position courante
         currLat = fix.latitude ();
@@ -46,6 +51,10 @@ void getGPS(void) {
           prevLocation = fix.location;
           // calcul vitesse moyenne
           avgSpeed = interKm / ((millis()-interStart)/3600);
+
+          // distance à SOmbreffe
+          distHome = fix.location.DistanceKm( home );
+          bearingHome = fix.location.BearingToDegrees( home );
         }
         
         /*

@@ -4,6 +4,8 @@
 
  *****************************************************************************************/
 
+
+
 float interKm = 0;
 float totKm = 0;
 int interStart=0;
@@ -37,6 +39,30 @@ void doComputes(void){
  *   
  *   
  */
+void draw1(void) {
+  /****************
+     Original
+  */
+  /*
+    char buf[30];
+    char key = keypad.getKey();
+    u8g.setFont(u8g_font_9x15);
+
+    snprintf (buf, 30, "KM : %i", totKm);
+    u8g.drawStr( 5, 40, buf);
+    snprintf (buf, 30, "Inter : %i", interKm);
+    u8g.drawStr( 5, 60, buf);
+  */
+  u8g.setFont(u8g_font_9x15);
+  prepareString(" Dist: ", totKm,"");
+  u8g.drawStr( 5, 30, printBuffer);
+  prepareString("Inter: ", interKm,"");
+  u8g.drawStr( 5, 50, printBuffer);
+
+  //  u8g.drawStr( 5, 60, (char) prepareString("Inter : ",interKm));
+
+}
+
 void processMode1(void){
   
 }
@@ -80,6 +106,10 @@ void processKeyMode1(char key) {
 }
 
 
+
+
+
+
 /*****************************************
  *   MODE 2 = XXXXXX
  *   
@@ -96,8 +126,20 @@ void processKeyMode1(char key) {
  */
 
 void processMode2(void){
-  
+
 }
+
+void draw2(void) {
+  u8g.setFont(u8g_font_6x13);
+  prepareString("  Cible:", targetSpeed," Km/h");
+  u8g.drawStr( 5, 24, printBuffer);
+  prepareString("Moyenne:", avgSpeed," Km/h");
+  u8g.drawStr( 5, 40, printBuffer);
+  prepareString("  Dist.:", interKm," Km");
+  u8g.drawStr( 5, 56, printBuffer);
+
+}
+
 
 
 void processKeyMode2(char key) {
@@ -141,6 +183,14 @@ void processKeyMode2(char key) {
  *   
  */
 
+ void draw3(void) {
+  u8g.setFont(u8g_font_10x20);
+  prepareString("  ", currSpeed," Km/h");
+  u8g.drawStr( 5, 45, printBuffer);
+}
+
+
+
 void processMode3(void){
   
 }
@@ -172,6 +222,24 @@ void processKeyMode3(char key) {
 *   
  *   
  */
+
+void draw4(void) {
+/*
+float currLat;
+float currLon;
+float distHome;
+float bearingHome;
+ */
+
+  
+  u8g.setFont(u8g_font_9x15);
+  prepareString("Home: ", distHome," Km");
+  u8g.drawStr( 5, 30, printBuffer);
+  prepareString("Dir.: ", bearingHome,"");
+  u8g.drawStr( 5, 50, printBuffer);
+
+
+} 
 
 void processMode4(void){
   
