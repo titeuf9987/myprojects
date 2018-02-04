@@ -2,8 +2,8 @@ long prevMeasure = millis();
 NeoGPS::Location_t prevLocation;
 /*50°31'54.0"N 4°37'10.3"E*/
 /* 50.531628, 4.619511 */
-NeoGPS::Location_t home( 4619511L, 50531628L );
-
+//static const NeoGPS::Location_t home( 4619511L, 50531628L ); // Real Home
+static const NeoGPS::Location_t home( 51.508131, -0.128002 );
 void initGPS(void) {
   Serial.println("Init GPS");
   gpsPort.begin(9600);
@@ -14,11 +14,11 @@ void saveLocation(void) {
 }
 
 void getGPS(void) {
-    if (gps.available( gpsPort )) {
+    /*if (gps.available( gpsPort )) {
       gps_fix fix1 = gps.read();
       Serial.println(fix1.satellites);
-    }
-       /*
+    }*/
+
   
   // mesure à intervalle régulier
   //if (millis() - prevMeasure >= gpsInterval) {
@@ -33,7 +33,6 @@ void getGPS(void) {
 
       if (fix.valid.satellites) {
         Serial.println("GPS OK");
-        prevMeasure = millis();
 
         
         sats = fix.satellites;
@@ -68,15 +67,14 @@ void getGPS(void) {
           prevLocation = fix.location;
           // calcul vitesse moyenne
           avgSpeed = interKm / ((millis()-interStart)/3600);
-
-          // distance à SOmbreffe
-          distHome = fix.location.DistanceKm( home );
-          bearingHome = fix.location.BearingToDegrees( home );
         }
+        // distance à SOmbreffe
+        distHome = fix.location.DistanceKm( home );
+        bearingHome = fix.location.BearingToDegrees( home );
       }
 
     }
-*/
+
 
   //}
 

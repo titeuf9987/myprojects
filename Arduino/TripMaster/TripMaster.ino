@@ -81,20 +81,28 @@ char mode = '1';
 
 void setup() {
   Serial.begin(57600);
+  gpsPort.begin(9600);
+  
   Serial.println("Setup");
   keypad.addEventListener(keypadEvent); // Add an event listener for this keypad
 
   initDisplay();
   initKeypad();
   initGPS();
+
+  
 }
 
 void loop() {
-  getGPS();
+
   
+  getGPS();
+ 
   char key = keypad.getKey();
   doComputes();
+  
   processDisplay();
+  
 }
 
 
