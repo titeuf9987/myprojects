@@ -16,7 +16,7 @@
 #include <GPSport.h>
 #include <Arduino.h>
 
-const int gpsInterval = 1000;
+const int gpsInterval = 3000;
 
 /***************************
  * Display variables
@@ -32,7 +32,8 @@ U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0); // I2C / TWI
 /***************************
  * GPS variables
  *************************/
-NMEAGPS     gps;
+
+
 
 int sats = 0;
 int currSpeed = 0;
@@ -41,9 +42,10 @@ float currLon;
 float distHome;
 float bearingHome;
 int alt;
+boolean firstValidGPS=false;
 
 
-
+NMEAGPS     gps;
 gps_fix fix;
 NeoGPS::Location_t prevPosition;
 
@@ -88,9 +90,9 @@ void setup() {
 }
 
 void loop() {
-  char key = keypad.getKey();
-  
   getGPS();
+  
+  char key = keypad.getKey();
   doComputes();
   processDisplay();
 }
